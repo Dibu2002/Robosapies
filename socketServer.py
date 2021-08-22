@@ -1,23 +1,22 @@
 import socket
 import cv2 as cv
-import time
+import json
 
-ports = [2004, 2005, 2002, 2003]
+ports = [1238, 1239, 1240, 1241]
 s = []
-for i in range(2):
+for i in range(1):
     s.append(socket.socket(socket.AF_INET, socket.SOCK_STREAM))
     s[i].bind(('0.0.0.0', ports[i]))
     s[i].listen(0)
 
-hello = [True, True, True, True]
 while True:
-    for i in range(2):
+    for i in range(1):
+
         client, addr = s[i].accept()
         client.settimeout(200)
-        if hello[i]:
-            client.send(b'H')
-            hello[i] = False
-        else:
-            client.send(b'L')
-            hello[i] = True
+
+        with open('data.json', 'r') as file:
+            data = file.read()
+            y = json.loads(data)
+            client.send(bytes(['func']))
         client.close()
