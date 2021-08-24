@@ -39,9 +39,9 @@ void loop()
         delay(1000);
         return;
     }
-    //Serial.println("Connected to server successful!");
-    //client.println("Hello From ESP8266");
-    delay(250);
+//     Serial.println("Connected to server successful!");
+//     client.println("Hello From ESP8266");
+//     delay(250);
     while (client.available() > 0)
     {
         char c = client.read();
@@ -56,9 +56,22 @@ void loop()
           digitalWrite(m[3], LOW);
           analogWrite(m[4], 100);
           analogWrite(m[5], 100);
-          delay(1);                   
+          delay(10);                   
         }
-        
+
+       else if(c == 'B')
+       {
+         Serial.println(c);
+         digitalWrite(LED_BUILTIN, LOW);
+         digitalWrite(m[1], HIGH);
+         digitalWrite(m[0], LOW);
+         digitalWrite(m[3], HIGH);
+         digitalWrite(m[2], LOW);
+         analogWrite(m[4], 100);
+         analogWrite(m[5], 100);
+         delay(10); 
+       }
+                
         else if(c == 'P')
         {
           Serial.println(c);
@@ -69,47 +82,33 @@ void loop()
           digitalWrite(m[2], LOW);
           analogWrite(m[4], 0);
           analogWrite(m[5], 0);
-          delay(1); 
+          delay(10); 
         }
-      
-
-// 
-
-//        else if(c == 'B')
-//        {
-//          Serial.println(c);
-//          digitalWrite(LED_BUILTIN, LOW);
-//          digitalWrite(m[1], HIGH);
-//          digitalWrite(m[0], LOW);
-//          digitalWrite(m[3], HIGH);
-//          digitalWrite(m[2], LOW);
-//          analogWrite(m[4], 100);
-//          analogWrite(m[5], 100);
-//          delay(1000); 
-//        }
-//        else if(c == 'L')
-//        {
-//          Serial.println(c);
-//          digitalWrite(LED_BUILTIN, HIGH);
-//          digitalWrite(m[0], HIGH);
-//          digitalWrite(m[1], LOW);
-//          digitalWrite(m[2], HIGH);
-//          digitalWrite(m[3], LOW);
-//          analogWrite(m[4], 100);
-//          analogWrite(m[5], 210);
-//          delay(1000); 
-//        }
+        
+       else if(c == 'L')
+       {
+         Serial.println(c);
+         digitalWrite(LED_BUILTIN, HIGH);
+         digitalWrite(m[0], HIGH);
+         digitalWrite(m[1], LOW);
+         digitalWrite(m[2], HIGH);
+         digitalWrite(m[3], LOW);
+         analogWrite(m[4], 100);
+         analogWrite(m[5], 210);
+         delay(10); 
+       }
+        
        else if(c == 'R')
        {
-      Serial.println(c);
+         Serial.println(c);
          digitalWrite(LED_BUILTIN, LOW);
-          digitalWrite(m[0], HIGH);
-          digitalWrite(m[1], LOW);
+         digitalWrite(m[0], HIGH);
+         digitalWrite(m[1], LOW);
          digitalWrite(m[2], HIGH);
          digitalWrite(m[3], LOW);
          analogWrite(m[4], 255);
-       analogWrite(m[5], 70);
-         delay(100); 
+         analogWrite(m[5], 70);
+         delay(10); 
         }
     }
     client.stop();
