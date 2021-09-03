@@ -5,30 +5,48 @@ const uint16_t port = 1234;
 const char *host = "192.168.137.1";
 WiFiClient client;
 
-int n = 6;
-int h = 100;
-int m[6] = {14,12,15,13,2,0};
+const int n = 6;
+int m[n] = {14,12,15,13,2,0};
+
+const int len = 10;
+char a[len];
+
+int cti(char c)
+{
+    return (int(c) - 48);
+}
+
+int sti(int s)
+{
+    int n = 0;
+    for(int i = s; i < s + 3; i++)
+    {
+        n *= 10;
+        n += cti(a[i]);
+    }
+    return n;
+}
 void setup()
 {
     pinMode(LED_BUILTIN, OUTPUT);
+    digitalWrite(LED_BUILTIN, LOW);
     for(int i = 0; i < n; i++)
         pinMode(m[i], OUTPUT);
 
-    digitalWrite(LED_BUILTIN, LOW);
     for(int i = 0; i < n; i++)
       digitalWrite(m[i], LOW);
 
-    Serial.begin(115200);
+    Serial.begin(9600);
     Serial.println("Connecting...\n");
     WiFi.mode(WIFI_STA);
-    WiFi.begin("mahakali", "123456789"); 
+    WiFi.begin("WIFI", "123456789"); 
     while (WiFi.status() != WL_CONNECTED)
     {
         delay(500);
         Serial.print(" .");
     }
     Serial.println("Wifi Connected !!");
-    digitalWrite(LED_BUILTIN, h);
+    digitalWrite(LED_BUILTIN, HIGH);
 }
 
 void loop()
@@ -39,77 +57,24 @@ void loop()
         delay(1000);
         return;
     }
-//     Serial.println("Connected to server successful!");
-//     client.println("Hello From ESP8266");
-//     delay(250);
-    while (client.available() > 0)
+//    Serial.println("Connected to server successful!");
+    //client.println("Hello From ESP8266");
+    delay(250);
+    
+    for(int i = 0; client.available() > 0; i++)
     {
-        char c = client.read();
-       
-        if(c == 'F')
-        {
-          Serial.println(c);
-          digitalWrite(LED_BUILTIN, HIGH);
-          digitalWrite(m[0], HIGH);
-          digitalWrite(m[1], LOW);
-          digitalWrite(m[2], HIGH);
-          digitalWrite(m[3], LOW);
-          analogWrite(m[4], 100);
-          analogWrite(m[5], 100);
-          delay(10);                   
-        }
-
-       else if(c == 'B')
-       {
-         Serial.println(c);
-         digitalWrite(LED_BUILTIN, LOW);
-         digitalWrite(m[1], HIGH);
-         digitalWrite(m[0], LOW);
-         digitalWrite(m[3], HIGH);
-         digitalWrite(m[2], LOW);
-         analogWrite(m[4], 100);
-         analogWrite(m[5], 100);
-         delay(10); 
-       }
-                
-        else if(c == 'P')
-        {
-          Serial.println(c);
-          digitalWrite(LED_BUILTIN, LOW);
-          digitalWrite(m[1], LOW);
-          digitalWrite(m[0], LOW);
-          digitalWrite(m[3], LOW);
-          digitalWrite(m[2], LOW);
-          analogWrite(m[4], 0);
-          analogWrite(m[5], 0);
-          delay(10); 
-        }
-        
-       else if(c == 'L')
-       {
-         Serial.println(c);
-         digitalWrite(LED_BUILTIN, HIGH);
-         digitalWrite(m[0], HIGH);
-         digitalWrite(m[1], LOW);
-         digitalWrite(m[2], HIGH);
-         digitalWrite(m[3], LOW);
-         analogWrite(m[4], 100);
-         analogWrite(m[5], 210);
-         delay(10); 
-       }
-        
-       else if(c == 'R')
-       {
-         Serial.println(c);
-         digitalWrite(LED_BUILTIN, LOW);
-         digitalWrite(m[0], HIGH);
-         digitalWrite(m[1], LOW);
-         digitalWrite(m[2], HIGH);
-         digitalWrite(m[3], LOW);
-         analogWrite(m[4], 255);
-         analogWrite(m[5], 70);
-         delay(10); 
-        }
+        a[i] = client.read();
+    } 
+    for(int i = 0; i < 4; i++)
+    {
+      digitalWrite(m[i], cti(a[i]));
+      Serial.println(cti(a[i]));
     }
+    analogWrite (m[4], sti(4));
+    Serial.println(sti(4));
+    analogWrite (m[5], sti(7));
+    Serial.println(sti(7));
+    delay(100);
+    Serial.println();
     client.stop();
 }
