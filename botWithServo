@@ -60,12 +60,11 @@ void loop()
     if (!client.connect(host, port))
     {
         Serial.println("Connection to host failed");
-        delay(1000);
+        delay(100);
         return;
     }
-//    Serial.println("Connected to server successful!");
-    //client.println("Hello From ESP8266");
-    delay(1);
+
+    delay(30);
     
     for(int i = 0; client.available() > 0; i++)
     {
@@ -74,7 +73,7 @@ void loop()
     if (a[10] == '1')
     {
       myMotor.write(130);
-      delay(2000);
+      delay(10);
       myMotor.write(0);
     }
     for(int i = 0; i < 4; i++)
@@ -86,7 +85,7 @@ void loop()
     Serial.println(sti(4));
     analogWrite (m[5], sti(7));
     Serial.println(sti(7));
-    delay(1);
+    delay(30);
     Serial.println();
     client.stop();
 }
